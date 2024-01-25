@@ -1,5 +1,5 @@
-# Implementation of NS-LCR
-This is the official implementation of the paper "A User Satisfaction Alignment Framework for Recommendation with Sparse and Biased User Questionnaire Feedback" based on PyTorch.
+# Implementation of SAQRec
+This is the official implementation of the paper "SAQRec: Aligning Recommender Systems to User Satisfaction via Questionnaire Feedback" based on PyTorch.
 
 ## Overview
 
