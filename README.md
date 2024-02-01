@@ -18,14 +18,14 @@ The settings of two datasets can be found in file `config/const.py`.
 Check folder `data` for details.
 
 ### Quick Start
-#### 1. Download data
+#### 1. Download and process data
 Place data files in the folder `data`.
 
 #### 2. Satisfy the requirements
 Our experiments were done with the following python packages:
 ```
 python==3.8.18
-torch==1.10.1+cu102
+torch==1.10.1
 numpy==1.24.1
 scikit-learn==1.3.1
 tqdm==4.66.1
@@ -55,7 +55,6 @@ After training, check log files, for example, `workspace/SAQRec/log/default.log`
 ### Environments
 We conducted the experiments based on the following environments:
 * CUDA Version: 11.1
-* torch version: 1.10.0
 * OS: CentOS Linux release 7.4.1708 (Core)
 * GPU: The NVIDIA® T4 GPU
 * CPU: Intel(R) Xeon(R) Gold 6230R CPU @ 2.10GHz
