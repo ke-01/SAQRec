@@ -1,0 +1,11 @@
+#training setting
+lr: 0.001
+min_lr: 0.00001
+weight_decay: 0.00001 # l2 norm
+patience: 1 # Number of epochs with no improvement after which learning rate will be reduced
+es_patience: 2 #patience for early stop
+
+#model config
+hid_units: [200, 80, 1]
+dropout: 0.1
+clamp: 0.05
