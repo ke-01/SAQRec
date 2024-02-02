@@ -368,11 +368,7 @@ class SAQRec(torch.nn.Module):
     
     
     def predict(self, input_data,labels=None):
-        """
-        :param 
-        categorical_x: Long tensor of size ``(batch_size, categorical_field_dims)``
-        numerical_x: Long tensor of size ``(batch_size, numerical_num)``
-        """
+
         user_emb, pos_item_emb, rec_his_emb, rec_his_mask,satis_his_emb,satis_his_mask,dissatis_his_emb,dissatis_his_mask  = self.input_from_feature_tables_test(input_data=input_data)
         
         batch_size=user_emb.size(0)

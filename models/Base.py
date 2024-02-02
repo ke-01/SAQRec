@@ -116,7 +116,7 @@ class Base(torch.nn.Module):
         rec_his_vector = self.gather_indexes(rec_his_emb, input_lengths - 1)
 
         user_emb=self.user2item(user_emb)
-        allvec = torch.cat([vec.unsqueeze(1) for vec in [ rec_his_vector,user_emb]], dim=1) #user大小不一样
+        allvec = torch.cat([vec.unsqueeze(1) for vec in [ rec_his_vector,user_emb]], dim=1) 
         attention_weights = F.softmax(self.get_weight_3(allvec).squeeze(), dim=-1)
         attention_weights = attention_weights.view(attention_weights.size(0), -1, 1) 
 
@@ -142,11 +142,7 @@ class Base(torch.nn.Module):
                 
         return loss
     def predict(self, input_data,labels=None):
-        """
-        :param 
-        categorical_x: Long tensor of size ``(batch_size, categorical_field_dims)``
-        numerical_x: Long tensor of size ``(batch_size, numerical_num)``
-        """
+
         
         user_emb, pos_item_emb, rec_his_emb, rec_his_mask,satis_his_emb,satis_his_mask,dissatis_his_emb,dissatis_his_mask  = self.input_from_feature_tables_test(input_data=input_data)
 

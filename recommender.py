@@ -1,4 +1,4 @@
-#coding=utf-8
+
 
 import torch
 import torch.nn as nn
@@ -73,7 +73,6 @@ class Recommender(object):
 
     def predict(self, sample):
         '''sample: input data and labels'''
-        # print(sample)
         sample = [[k.to(self.device) for k in i] if type(i) == list else i.to(self.device) for i in sample]
         input_data = sample[:-2] 
         return self.model.predict(input_data) 

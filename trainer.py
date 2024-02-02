@@ -1,8 +1,3 @@
-#coding=utf-8
-#pylint: disable=no-member
-#pylint: disable=no-name-in-module
-#pylint: disable=import-error
-
 import os
 from tqdm import tqdm
 from utils.data import get_dataloader

@@ -48,7 +48,7 @@ class Satis_Model(torch.nn.Module):
 
         desired_params = {}
         for name, param in all_params.items():
-            if 'emb' in name :  # 替换为你希望加载的参数的名称
+            if 'emb' in name :  
                 desired_params[name] = param
         result=self.load_state_dict(desired_params, strict=False)
 

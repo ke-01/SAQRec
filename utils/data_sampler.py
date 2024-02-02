@@ -37,8 +37,7 @@ class Point_Sampler(Sampler):
         self.user_vocab = self.pickle_loader.load(args.user_vocab)
         self.item_vocab = self.pickle_loader.load(args.item_vocab)
 
-        self.items_with_popular = self.record['i_id'].tolist() #i_id即item_id,为什么是popular?
-
+        self.items_with_popular = self.record['i_id'].tolist() 
         self.max_rec_his = const.max_rec_his_len
         self.max_satis_his = const.max_satis_his_len
         self.max_dissatis_his = const.max_dissatis_his_len
@@ -85,7 +84,7 @@ class Point_Sampler(Sampler):
         count = 0
         neg_items = []
         while count < self.num_negs:
-            neg_item = random.choice(self.items_with_popular) #从流行的item中采样，如果是正例，在负例中，或者在用户推荐历史中，再随机选择
+            neg_item = random.choice(self.items_with_popular) 
             if  neg_item == postive_item or\
                 neg_item in neg_items or\
                 neg_item in user_rec_his:
@@ -97,7 +96,7 @@ class Point_Sampler(Sampler):
 
     def commercial_parse_line(self, index):
 
-        line = self.record.iloc[index] #取一行数据
+        line = self.record.iloc[index] 
 
         user = int(line['u_id'])
         pos_item = int(line['i_id'])
@@ -108,7 +107,7 @@ class Point_Sampler(Sampler):
         return user, pos_item, rec_his_num, src_his_num, label
     def _kuairand_parse_line(self, index):
 
-        line = self.record.iloc[index] #取一行数据
+        line = self.record.iloc[index] 
 
         user = int(line['u_id'])
         pos_item = int(line['i_id'])
@@ -141,100 +140,123 @@ class Point_Sampler(Sampler):
     def train_sample(self, index):
         
         if self.dataset_name=='commercial':
-            user, pos_item, rec_his_num, src_his_num, label = self.parse_line(index)
-
-            rec_his = self.user_vocab[user]['rec_his'][:rec_his_num] #取前rec_his_num数量的id
-
-            items = [pos_item]*(1+self.num_negs)
-
-            labels = []
-            if self.num_negs > 0:
-                items[1:] = self._gen_neg_samples(pos_item, rec_his)
-
-                labels = [0.0]*(1+self.num_negs)
-                labels[0] = 1.0
-            else:
-                labels = [label]
-
-            items = list(
-            list(elem) for elem in zip(*[self._get_item_info(it)  for it in items])
-            )
-
-            users = [
-                [attr]*(1+self.num_negs) for attr in self._get_user_profile(user)
-            ]
-
-            rec_his = rec_his[-self.max_rec_his:]
-            if len(rec_his) < self.max_rec_his:
-                rec_his += [0]*(self.max_rec_his - len(rec_his))
-
-            rec_his_items = list(
-                list(elem) for elem in zip(*[self._get_item_info(it)  for it in rec_his])
-            )
-            rec_hiss = [ [item_att] * (1+self.num_negs) for item_att in rec_his_items ]
-        elif self.dataset_name=='kuairand':
             user, pos_item, time_ms, click_cnt, satis_cnt,dissatis_cnt,labels,satis = self.parse_line(index)
 
-            rec_his = self.user_vocab[user]['click_his'][:click_cnt] #取前rec_his_num数量的id
-            satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] #取前rec_his_num数量的id
-            dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] #取前rec_his_num数量的id
+            rec_his = self.user_vocab[user]['click_his'][:click_cnt] 
+            satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] 
+            dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] 
 
             neg_items = []
-
             if self.num_negs > 0:
                 neg_items = self._gen_neg_samples(pos_item, rec_his)
-            neg_items = self.wrap_item_his_ls(neg_items) #得到4个负例item对应的特征
+            neg_items = self.wrap_item_his_ls(neg_items) 
             pos_item = list(self._get_item_info(pos_item))
             users = [ attr for attr in self._get_user_profile(user) ]
 
             rec_his = rec_his[-self.max_rec_his:]
             if len(rec_his) < self.max_rec_his:
                 rec_his += [0]*(self.max_rec_his - len(rec_his))
-
-            rec_hiss = self.wrap_item_his_ls(rec_his) #历史item特征
-            
+            rec_hiss = self.wrap_item_his_ls(rec_his) 
             satis_his = satis_his[-self.max_satis_his:]
             if len(satis_his) < self.max_satis_his:
                 satis_his += [0]*(self.max_satis_his - len(satis_his))
-            # print('satis1:{}'.format(satis_his))
-            satis_hiss = self.wrap_item_his_ls(satis_his) #历史item特征
-            # print()
+            satis_hiss = self.wrap_item_his_ls(satis_his) 
             dissatis_his = dissatis_his[-self.max_dissatis_his:]
             if len(dissatis_his) < self.max_dissatis_his:
                 dissatis_his += [0]*(self.max_dissatis_his - len(dissatis_his))
-            dissatis_hiss = self.wrap_item_his_ls(dissatis_his) #历史item特征
+            dissatis_hiss = self.wrap_item_his_ls(dissatis_his) 
 
-            return users, rec_hiss, satis_hiss,dissatis_hiss,pos_item, neg_items,satis#返回用户特征，推荐历史，正例1个，负例4个所有的特征，都是列表
+            return users, rec_hiss, satis_hiss,dissatis_hiss,pos_item, neg_items,satis
+        elif self.dataset_name=='kuairand':
+            user, pos_item, play_time_ms, click_cnt, satis_cnt,dissatis_cnt,labels,satis = self.parse_line(index)
+            rec_his = self.user_vocab[user]['click_his'][:click_cnt] 
+            plays= self.user_vocab[user]['play_time_ms'][:click_cnt]
+            satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] 
+            dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] 
+
+            neg_items = []
+            if self.num_negs > 0:
+                neg_items = self._gen_neg_samples(pos_item, rec_his)  
+            neg_items = self.wrap_item_his_ls(neg_items) 
+            pos_item = list(self._get_item_info(pos_item))
+            users = [ attr for attr in self._get_user_profile(user) ]
+
+            rec_his = rec_his[-self.max_rec_his:]
+            plays=plays[-self.max_rec_his:]
+            if len(dissatis_his)==0:
+                min_index = plays.index(min(plays))
+                dissatis_his.append(rec_his[min_index])  
+            if len(satis_his)==0:
+                max_index = plays.index(max(plays))
+                satis_his.append(rec_his[max_index])  
+            if len(rec_his) < self.max_rec_his:
+                rec_his += [0]*(self.max_rec_his - len(rec_his))
+            rec_hiss = self.wrap_item_his_ls(rec_his) 
+            satis_his = satis_his[-self.max_satis_his:]
+            if len(satis_his) < self.max_satis_his:
+                satis_his += [0]*(self.max_satis_his - len(satis_his))
+            satis_hiss = self.wrap_item_his_ls(satis_his) 
+            dissatis_his = dissatis_his[-self.max_dissatis_his:]
+            if len(dissatis_his) < self.max_dissatis_his:
+                dissatis_his += [0]*(self.max_dissatis_his - len(dissatis_his))
+            dissatis_hiss = self.wrap_item_his_ls(dissatis_his)
+
+
+            return users, rec_hiss, satis_hiss,dissatis_hiss,pos_item, neg_items,satis 
     def test_sample(self, index):
+        if self.dataset_name=='commercial':
+            user, pos_item, time_ms, click_cnt, satis_cnt,dissatis_cnt,labels,satis  = self.parse_line(index)
 
-        user, pos_item, time_ms, click_cnt, satis_cnt,dissatis_cnt,labels,satis  = self.parse_line(index)
+            rec_his = self.user_vocab[user]['click_his'][:click_cnt] 
+            satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] 
+            dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] 
+            item = list(self._get_item_info(pos_item))
+            users = [ attr for attr in self._get_user_profile(user) ]
 
-        rec_his = self.user_vocab[user]['click_his'][:click_cnt] #取前rec_his_num数量的id
-        satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] #取前rec_his_num数量的id
-        dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] #取前rec_his_num数量的id
-        item = list(self._get_item_info(pos_item))
+            rec_his = rec_his[-self.max_rec_his:]
+            if len(rec_his) < self.max_rec_his:
+                rec_his += [0]*(self.max_rec_his - len(rec_his))
+            rec_hiss = self.wrap_item_his_ls(rec_his)
+            satis_his = satis_his[-self.max_satis_his:]
+            if len(satis_his) < self.max_satis_his:
+                satis_his += [0]*(self.max_satis_his - len(satis_his))
+            satis_hiss = self.wrap_item_his_ls(satis_his) 
+            dissatis_his = dissatis_his[-self.max_dissatis_his:]
+            if len(dissatis_his) < self.max_dissatis_his:
+                dissatis_his += [0]*(self.max_dissatis_his - len(dissatis_his))
+            dissatis_hiss = self.wrap_item_his_ls(dissatis_his) 
+            labels = torch.tensor(labels, dtype=torch.float32)
 
-        users = [ attr for attr in self._get_user_profile(user) ]
+            return users, rec_hiss, satis_hiss,dissatis_hiss, item, labels,satis
+        elif self.dataset_name=='kuairand':
+            user, pos_item, play_time_ms, click_cnt, satis_cnt,dissatis_cnt,labels,satis  = self.parse_line(index)
 
-        rec_his = rec_his[-self.max_rec_his:]
-        if len(rec_his) < self.max_rec_his:
-            rec_his += [0]*(self.max_rec_his - len(rec_his))
+            rec_his = self.user_vocab[user]['click_his'][:click_cnt] 
+            plays= self.user_vocab[user]['play_time_ms'][:click_cnt]
+            satis_his = self.user_vocab[user]['satis_his'][:satis_cnt] 
+            dissatis_his = self.user_vocab[user]['dissatis_his'][:dissatis_cnt] 
+            item = list(self._get_item_info(pos_item))
+            users = [ attr for attr in self._get_user_profile(user) ]
 
-        rec_hiss = self.wrap_item_his_ls(rec_his)
-        
-        satis_his = satis_his[-self.max_satis_his:]
-        if len(satis_his) < self.max_satis_his:
-            satis_his += [0]*(self.max_satis_his - len(satis_his))
+            rec_his = rec_his[-self.max_rec_his:]
+            plays=plays[-self.max_rec_his:]
+            if len(dissatis_his)==0:
+                min_index = plays.index(min(plays))
+                dissatis_his.append(rec_his[min_index]) 
+            if len(satis_his)==0:
+                max_index = plays.index(max(plays))
+                satis_his.append(rec_his[max_index])  
+            if len(rec_his) < self.max_rec_his:
+                rec_his += [0]*(self.max_rec_his - len(rec_his))
+            rec_hiss = self.wrap_item_his_ls(rec_his)
+            satis_his = satis_his[-self.max_satis_his:]
+            if len(satis_his) < self.max_satis_his:
+                satis_his += [0]*(self.max_satis_his - len(satis_his))
+            satis_hiss = self.wrap_item_his_ls(satis_his) 
+            dissatis_his = dissatis_his[-self.max_dissatis_his:]
+            if len(dissatis_his) < self.max_dissatis_his:
+                dissatis_his += [0]*(self.max_dissatis_his - len(dissatis_his))
+            dissatis_hiss = self.wrap_item_his_ls(dissatis_his) 
+            labels = torch.tensor(labels, dtype=torch.float32)
 
-        satis_hiss = self.wrap_item_his_ls(satis_his) #历史item特征
-        
-        dissatis_his = dissatis_his[-self.max_dissatis_his:]
-        if len(dissatis_his) < self.max_dissatis_his:
-            dissatis_his += [0]*(self.max_dissatis_his - len(dissatis_his))
-
-        dissatis_hiss = self.wrap_item_his_ls(dissatis_his) #历史item特征
-
-        labels = torch.tensor(labels, dtype=torch.float32)
-
-        return users, rec_hiss, satis_hiss,dissatis_hiss, item, labels,satis
-
+            return users, rec_hiss, satis_hiss,dissatis_hiss, item, labels,satis

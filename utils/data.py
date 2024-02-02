@@ -23,7 +23,7 @@ class BaseDataset(Dataset):
 class Pointwise_Dataset(BaseDataset):
     def __init__(self, dataset_file, flags_obj, is_train):
         super().__init__()
-        self.sampler = Point_Sampler(dataset_file, flags_obj, is_train=is_train)  #这里的false
+        self.sampler = Point_Sampler(dataset_file, flags_obj, is_train=is_train)  
 
     def __getitem__(self, index):
         '''
