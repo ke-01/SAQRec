@@ -38,10 +38,10 @@ Run codes in command line:
 # Base model
 python main.py --name base --workspace ./workspace/base --gpu_id 0  --epochs 100 --model Base  --batch_size 512 --dataset_name kuairand
 
-# propensity model 
+# Propensity model 
 python main.py --name pro --workspace ./workspace/pro --gpu_id 0  --epochs 100 --model Pro_Model  --batch_size 512 --dataset_name kuairand
 
-# satisfaction model 
+# Satisfaction model 
 python main.py --name satis --workspace ./workspace/satis --gpu_id 0  --epochs 100 --model Satis_Model  --batch_size 512 --dataset_name kuairand
 
 # SAQRec 
