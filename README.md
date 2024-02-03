@@ -35,16 +35,16 @@ PyYAML==6.0.1
 #### 3. Train and evaluate our model:
 Run codes in command line:
 ```bash
-# for Base
+# Base model
 python main.py --name base --workspace ./workspace/base --gpu_id 0  --epochs 100 --model Base  --batch_size 512 --dataset_name kuairand
 
-# for propensity model 
+# propensity model 
 python main.py --name pro --workspace ./workspace/pro --gpu_id 0  --epochs 100 --model Pro_Model  --batch_size 512 --dataset_name kuairand
 
-# for satisfaction model 
+# satisfaction model 
 python main.py --name satis --workspace ./workspace/satis --gpu_id 0  --epochs 100 --model Satis_Model  --batch_size 512 --dataset_name kuairand
 
-# for SAQRec 
+# SAQRec 
 python main.py --name SAQRec --workspace ./workspace/SAQRec --gpu_id 0  --epochs 100 --model SAQRec  --batch_size 512 --dataset_name kuairand
 ```
 

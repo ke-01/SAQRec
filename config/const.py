@@ -16,6 +16,8 @@ def init_dataset_setting_commercial():
     item_vocab = 'vocab/commercial_item_vocab.pickle'
 
     train_file = 'dataset/commercial_train.tsv'
+    # for satisfaction model 
+    # train_file = 'dataset/commercial_reward.tsv'
     valid_file = 'dataset/commercial_valid.tsv'
     test_file = 'dataset/commercial_test.tsv'
     
@@ -70,6 +72,8 @@ def init_dataset_setting_kuairand():
     item_vocab = 'vocab/kuairand_item_vocab.pickle'
 
     train_file = 'dataset/kuairand_train.tsv'
+    # for satisfaction model
+    # train_file = 'dataset/kuairand_reward.tsv'
     valid_file = 'dataset/kuairand_valid.tsv'
     test_file = 'dataset/kuairand_test.tsv'
 
