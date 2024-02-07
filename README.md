@@ -36,17 +36,19 @@ PyYAML==6.0.1
 Run codes in command line:
 ```bash
 # Base model
-python main.py --name base --workspace ./workspace/base --gpu_id 0  --epochs 100 --model Base  --batch_size 512 --dataset_name kuairand
+python main.py --name base --workspace ./workspace/base --gpu_id 0  --epochs 100 --model Base  --batch_size 512 --dataset_name kuairand --num_negs 2
 
 # Propensity model 
-python main.py --name pro --workspace ./workspace/pro --gpu_id 0  --epochs 100 --model Pro_Model  --batch_size 512 --dataset_name kuairand
+python main.py --name pro --workspace ./workspace/pro --gpu_id 0  --epochs 100 --model Pro_Model  --batch_size 512 --dataset_name kuairand --num_negs 0
 
 # Satisfaction model 
-python main.py --name satis --workspace ./workspace/satis --gpu_id 0  --epochs 100 --model Satis_Model  --batch_size 512 --dataset_name kuairand
+python main.py --name satis --workspace ./workspace/satis --gpu_id 0  --epochs 100 --model Satis_Model  --batch_size 512 --dataset_name kuairand --num_negs 0
 
 # SAQRec 
-python main.py --name SAQRec --workspace ./workspace/SAQRec --gpu_id 0  --epochs 100 --model SAQRec  --batch_size 512 --dataset_name kuairand
+python main.py --name SAQRec --workspace ./workspace/SAQRec --gpu_id 0  --epochs 100 --model SAQRec  --batch_size 512 --dataset_name kuairand --num_negs 2
 ```
+
+Note: When training propensity and satisfaction models, comment out the test section of the main.py
 
 #### 4. Check training and evaluation process:
 After training, check log files, for example, `workspace/SAQRec/log/default.log`.

@@ -57,4 +57,4 @@ dm = DatasetManager(args)
 trainer = cm.set_trainer(args, cm, dm)
 
 trainer.train()
-trainer.test()
+trainer.test() # When training propensity and satisfaction models, comment out it.
